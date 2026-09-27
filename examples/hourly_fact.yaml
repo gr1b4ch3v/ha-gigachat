@@ -1,0 +1,81 @@
+# Каждый час с 9:00 до 21:00 ГигаЧат придумывает и проверяет интересный факт, колонка его озвучивает.
+# Замените media_player.kitchen_speaker на свою колонку (например, Яндекс Станцию).
+#
+# Every hour from 9:00 to 21:00 GigaChat writes and fact-checks an interesting fact, a speaker reads it out.
+# Replace media_player.kitchen_speaker with your speaker (for example, a Yandex Station).
+alias: Интересный факт каждый час
+description: >-
+  Каждый час с 9:00 до 21:00 ГигаЧат придумывает и проверяет интересный факт,
+  колонка его озвучивает. Если ГигаЧат недоступен, колонка молчит.
+triggers:
+  - trigger: time_pattern
+    minutes: 0
+conditions:
+  - condition: time
+    after: "09:00:00"
+    before: "22:00:00"
+actions:
+  - alias: Придумать факт
+    action: ai_task.generate_data
+    data:
+      task_name: Факт часа
+      entity_id: ai_task.gigachat_ai_task
+      # In English: Write one sentence with an interesting, useful and verified fact that everyone will like.
+      # Topic: ... Only a reliable fact you are sure about, no made-up numbers. No quotes, emoji or markup:
+      # the text will be read aloud.
+      instructions: >-
+        Создай текст, 1 предложение, интересный и полезный факт,
+        информационно полезное. Верифицированное. Чтобы всем понравилось!
+
+        Тема: {{ ['кофе', 'космос', 'человеческое тело', 'животные', 'растения',
+        'океаны', 'изобретения', 'русский язык', 'география', 'музыка',
+        'физика', 'химия', 'кулинария', 'спорт', 'математика', 'архитектура',
+        'погода', 'сон', 'психология', 'технологии'] | random }}.
+
+        Только достоверный факт, в котором ты уверен, без выдуманных цифр. Без
+        кавычек, эмодзи и разметки: текст будет озвучен.
+    response_variable: fact
+    continue_on_error: true
+  # Второй запрос проверяет факт и исправляет неточности. Удалите этот шаг, если проверка не нужна.
+  # A second request fact-checks the answer and fixes mistakes. Remove this step if you do not need it.
+  - alias: Проверить факт
+    if:
+      - condition: template
+        value_template: >-
+          {{ fact is defined and fact.data | default('') | length > 0 }}
+    then:
+      - action: ai_task.generate_data
+        data:
+          task_name: "Факт часа: проверка"
+          entity_id: ai_task.gigachat_ai_task
+          instructions: >-
+            Проверь факт как строгий научный редактор: «{{ fact.data }}»
+
+            Если факт верен, верни его без изменений. Если в нём есть ошибка или
+            неточность, исправь её. Если факт сомнительный, замени его другим
+            достоверным фактом на ту же тему.
+
+            Ответ: только итоговый текст, одно предложение до 30 слов, без
+            кавычек и разметки.
+        response_variable: checked_fact
+        continue_on_error: true
+  # Шаблонное условие должно возвращать ровно True или False, поэтому длина сравнивается явно.
+  # A template condition must render exactly True or False, hence the explicit length checks.
+  - alias: Озвучить
+    if:
+      - condition: template
+        value_template: >-
+          {{ (checked_fact is defined and checked_fact.data | default('') | length > 0)
+          or (fact is defined and fact.data | default('') | length > 0) }}
+    then:
+      - action: media_player.play_media
+        target:
+          entity_id: media_player.kitchen_speaker
+        data:
+          media:
+            media_content_id: >-
+              Интересный факт: {{ (checked_fact.data if checked_fact is defined
+              and checked_fact.data else fact.data) | replace('*', '') | trim }}
+            media_content_type: text
+            metadata: {}
+mode: single

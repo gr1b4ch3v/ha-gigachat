@@ -1,0 +1,42 @@
+# Каждое утро ГигаЧат оценивает погоду и возвращает структурированный ответ:
+# В ответе два поля: summary с текстом и walk_ok со значением да или нет. Замените weather.home на свой объект погоды.
+#
+# Every morning GigaChat assesses the weather and returns a structured answer:
+# summary is text, walk_ok is a boolean. Replace weather.home with your weather entity.
+alias: Погода для прогулки
+description: Структурированный ответ ГигаЧата о погоде.
+triggers:
+  - trigger: time
+    at: "08:00:00"
+conditions: []
+actions:
+  - action: ai_task.generate_data
+    data:
+      task_name: Погода для прогулки
+      entity_id: ai_task.gigachat_ai_task
+      # In English: Weather: ... Is it good for a walk?
+      instructions: >-
+        Погода: {{ states('weather.home') }},
+        {{ state_attr('weather.home', 'temperature') }} °C.
+        Подходит ли она для прогулки?
+      structure:
+        summary:
+          description: Краткий вывод / Short conclusion
+          required: true
+          selector:
+            text:
+        walk_ok:
+          description: Можно ли гулять / Is it good for a walk
+          required: true
+          selector:
+            boolean:
+    response_variable: weather
+  - if:
+      - condition: template
+        value_template: "{{ weather.data.walk_ok }}"
+    then:
+      - action: notify.notify
+        data:
+          title: Хорошая погода для прогулки / Good weather for a walk
+          message: "{{ weather.data.summary }}"
+mode: single

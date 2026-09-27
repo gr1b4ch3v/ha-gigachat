@@ -1,0 +1,52 @@
+# По будням в 7:30 колонка зачитывает утреннюю сводку: погода на день и события из календаря.
+# Замените weather.home, calendar.family и media_player.kitchen_speaker на свои объекты.
+#
+# On weekdays at 7:30 a speaker reads a morning briefing: today's weather and calendar events.
+# Replace weather.home, calendar.family and media_player.kitchen_speaker with your entities.
+alias: Утренняя сводка
+description: ГигаЧат собирает прогноз погоды и события календаря в короткую сводку.
+triggers:
+  - trigger: time
+    at: "07:30:00"
+conditions:
+  - condition: time
+    weekday: [mon, tue, wed, thu, fri]
+actions:
+  - action: weather.get_forecasts
+    target:
+      entity_id: weather.home
+    data:
+      type: daily
+    response_variable: forecast
+  - action: calendar.get_events
+    target:
+      entity_id: calendar.family
+    data:
+      duration:
+        hours: 16
+    response_variable: agenda
+  - action: ai_task.generate_data
+    data:
+      task_name: Утренняя сводка
+      entity_id: ai_task.gigachat_ai_task
+      # In English: Write a kind morning greeting for the family in 2-3 sentences: today's weather and plans.
+      instructions: >-
+        Составь доброе утреннее приветствие для семьи на 2-3 предложения:
+        погода на сегодня и планы на день.
+
+        Прогноз: {{ forecast['weather.home'].forecast[0] | to_json }}.
+
+        События: {{ agenda['calendar.family'].events | map(attribute='summary')
+        | join(', ') or 'нет' }}.
+
+        Без разметки и эмодзи: текст будет озвучен.
+    response_variable: briefing
+  - action: media_player.play_media
+    target:
+      entity_id: media_player.kitchen_speaker
+    data:
+      media:
+        media_content_id: "{{ briefing.data }}"
+        media_content_type: text
+        metadata: {}
+mode: single

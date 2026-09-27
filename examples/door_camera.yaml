@@ -1,0 +1,31 @@
+# Когда звонят в дверь, ГигаЧат описывает снимок с камеры и присылает уведомление.
+# Нужна модель с поддержкой изображений: GigaChat-3-Ultra, GigaChat-2-Max или GigaChat-2-Pro.
+# Замените binary_sensor.doorbell, camera.front_door и notify.notify на свои объекты.
+#
+# When someone rings the doorbell, GigaChat describes the camera snapshot and sends a notification.
+# Requires a model with image support: GigaChat-3-Ultra, GigaChat-2-Max or GigaChat-2-Pro.
+# Replace binary_sensor.doorbell, camera.front_door and notify.notify with your entities.
+alias: Кто у двери
+description: ГигаЧат описывает, кто стоит у двери.
+triggers:
+  - trigger: state
+    entity_id:
+      - binary_sensor.doorbell
+    to: "on"
+conditions: []
+actions:
+  - action: ai_task.generate_data
+    data:
+      task_name: Дверной звонок
+      entity_id: ai_task.gigachat_ai_task
+      # In English: Briefly describe who is at the door. One sentence.
+      instructions: Кратко опиши, кто стоит у двери. Одно предложение.
+      attachments:
+        - media_content_id: media-source://camera/camera.front_door
+          media_content_type: image/jpeg
+    response_variable: door
+  - action: notify.notify
+    data:
+      title: У двери / At the door
+      message: "{{ door.data }}"
+mode: single

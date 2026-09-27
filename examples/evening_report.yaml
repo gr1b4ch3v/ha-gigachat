@@ -1,0 +1,43 @@
+# В 23:00 колонка кратко говорит, где горит свет и что осталось открытым. Если всё в порядке, так и скажет.
+# Замените media_player.bedroom_speaker на свою колонку.
+#
+# At 23:00 a speaker briefly says which lights are on and what is left open. If all is fine, it says so.
+# Replace media_player.bedroom_speaker with your speaker.
+alias: Вечерний обход
+description: ГигаЧат превращает список включённого света и открытых окон в короткий отчёт.
+triggers:
+  - trigger: time
+    at: "23:00:00"
+conditions: []
+variables:
+  lights_on: >-
+    {{ states.light | selectattr('state', 'eq', 'on')
+    | map(attribute='name') | list }}
+  open_now: >-
+    {{ states.binary_sensor
+    | selectattr('attributes.device_class', 'defined')
+    | selectattr('attributes.device_class', 'in', ['door', 'window', 'garage_door', 'opening'])
+    | selectattr('state', 'eq', 'on') | map(attribute='name') | list }}
+actions:
+  - action: ai_task.generate_data
+    data:
+      task_name: Вечерний обход
+      entity_id: ai_task.gigachat_ai_task
+      # In English: Write a short evening report for the family, 1-2 sentences. If nothing is on or open,
+      # say that the home is ready for the night.
+      instructions: >-
+        Составь короткий вечерний отчёт для семьи, 1-2 предложения.
+        Включён свет: {{ lights_on | join(', ') or 'нигде' }}.
+        Открыто: {{ open_now | join(', ') or 'ничего' }}.
+        Если всё выключено и закрыто, скажи, что дом готов ко сну.
+        Без разметки и эмодзи: текст будет озвучен.
+    response_variable: report
+  - action: media_player.play_media
+    target:
+      entity_id: media_player.bedroom_speaker
+    data:
+      media:
+        media_content_id: "{{ report.data }}"
+        media_content_type: text
+        metadata: {}
+mode: single

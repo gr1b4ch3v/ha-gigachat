@@ -1,0 +1,28 @@
+name: "Идея / Feature request"
+description: "Предложить улучшение / Suggest an improvement"
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: "Какую задачу это решит? / What problem does it solve?"
+      description: "Расскажите о сценарии использования. / Describe your use case."
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: "Как это могло бы работать? / How could it work?"
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "Альтернативы / Alternatives"
+      description: "Как вы решаете задачу сейчас? / How do you solve it today?"
+  - type: checkboxes
+    id: api
+    attributes:
+      label: "API ГигаЧата / GigaChat API"
+      options:
+        - label: "Я проверил, что это поддерживает API ГигаЧата / I checked that the GigaChat API supports it"

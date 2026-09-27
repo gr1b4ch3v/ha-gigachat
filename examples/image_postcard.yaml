@@ -1,0 +1,27 @@
+# Каждое утро ГигаЧат рисует открытку и присылает ссылку на неё.
+# Картинки рисуют модели GigaChat-2: интеграция выберет подходящую сама.
+# Картинка сохраняется в медиатеке Home Assistant (Медиа → AI Generated Images).
+#
+# Every morning GigaChat draws a postcard and sends a link to it.
+# Images are drawn by GigaChat-2 models, the integration picks one automatically.
+# The image is stored in the Home Assistant media library (Media → AI Generated Images).
+alias: Утренняя открытка
+description: ГигаЧат рисует открытку на новый день.
+triggers:
+  - trigger: time
+    at: "07:30:00"
+conditions: []
+actions:
+  - action: ai_task.generate_image
+    data:
+      task_name: Открытка
+      entity_id: ai_task.gigachat_ai_task
+      # In English: A cozy morning postcard with a cup of coffee and a sunrise over the sea, watercolor
+      instructions: >-
+        Уютная утренняя открытка: чашка кофе и рассвет над морем, акварель
+    response_variable: image
+  - action: notify.notify
+    data:
+      title: Доброе утро! / Good morning!
+      message: "Открытка / Postcard: {{ image.url }}"
+mode: single

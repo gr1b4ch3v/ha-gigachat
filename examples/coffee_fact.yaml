@@ -1,0 +1,46 @@
+# Когда кофемашина выключается, колонка говорит «Кофе-справка» и интересный факт от ГигаЧата.
+# Замените binary_sensor.coffee_machine и media_player.kitchen_speaker на свои объекты.
+#
+# When the coffee machine turns off, the speaker says "Coffee fact" and an interesting fact from GigaChat.
+# Replace binary_sensor.coffee_machine and media_player.kitchen_speaker with your entities.
+alias: Кофе-справка
+description: >-
+  После выключения кофемашины ГигаЧат рассказывает интересный факт.
+triggers:
+  - trigger: state
+    entity_id:
+      - binary_sensor.coffee_machine
+    from: "on"
+    to: "off"
+conditions: []
+actions:
+  - action: ai_task.generate_data
+    data:
+      task_name: Кофе-справка
+      entity_id: ai_task.gigachat_ai_task
+      # In English: Write one sentence with an interesting and useful fact. Only a reliable fact you are sure
+      # about, no made-up numbers. No quotes, emoji or markup: the text will be read aloud.
+      instructions: >-
+        Создай текст, 1 предложение, интересный и полезный факт,
+        информационно полезное. Верифицированное. Чтобы всем понравилось!
+
+        Только достоверный факт, в котором ты уверен, без выдуманных цифр. Без
+        кавычек, эмодзи и разметки: текст будет озвучен.
+    response_variable: coffee_fact
+    continue_on_error: true
+  # Если ГигаЧат недоступен, шаг пропускается и колонка молчит.
+  # If GigaChat is unavailable, this step is skipped and the speaker stays silent.
+  - if:
+      - condition: template
+        value_template: >-
+          {{ coffee_fact is defined and coffee_fact.data | default('') | length > 0 }}
+    then:
+      - action: media_player.play_media
+        target:
+          entity_id: media_player.kitchen_speaker
+        data:
+          media:
+            media_content_id: "Кофе-справка. {{ coffee_fact.data | trim }}"
+            media_content_type: text
+            metadata: {}
+mode: single

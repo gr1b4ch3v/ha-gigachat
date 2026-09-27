@@ -1,0 +1,22 @@
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+pythonpath = ["."]
+filterwarnings = ["ignore::DeprecationWarning:acme.*"]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "RUF", "ASYNC", "PL", "D"]
+ignore = ["D203", "D213", "E501", "PLR0913", "PLR0912", "PLR0915", "PLR2004", "PLR0911"]
+
+[tool.ruff.lint.isort]
+force-sort-within-sections = true
+known-first-party = ["custom_components.gigachat"]
+combine-as-imports = true
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["D", "PLR2004", "S101", "PLR0917", "RUF001"]

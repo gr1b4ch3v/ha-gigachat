@@ -1,0 +1,22 @@
+{
+  "entity": {
+    "ai_task": {
+      "ai_task_data": {
+        "default": "mdi:creation-outline"
+      }
+    },
+    "conversation": {
+      "conversation": {
+        "default": "mdi:message-processing-outline"
+      }
+    },
+    "sensor": {
+      "balance": {
+        "default": "mdi:circle-multiple-outline"
+      },
+      "tokens_used": {
+        "default": "mdi:counter"
+      }
+    }
+  }
+}

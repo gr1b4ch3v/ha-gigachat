@@ -1,0 +1,23 @@
+# Уведомление, когда остаток токенов Ultra опускается ниже миллиона.
+# Для других моделей используйте sensor.gigachat_lite_token_balance, _pro_ или _max_.
+#
+# A notification when the remaining Ultra tokens drop below one million.
+# For other models use sensor.gigachat_lite_token_balance, _pro_ or _max_.
+alias: Заканчиваются токены ГигаЧата
+description: Предупреждает, что пакет токенов скоро закончится.
+triggers:
+  - trigger: numeric_state
+    entity_id:
+      - sensor.gigachat_ultra_token_balance
+    below: 1000000
+conditions: []
+actions:
+  - action: persistent_notification.create
+    data:
+      title: ГигаЧат
+      message: >-
+        Осталось {{ states('sensor.gigachat_ultra_token_balance') | int(0) }} токенов Ultra.
+        Пополните баланс в личном кабинете Studio.
+        / {{ states('sensor.gigachat_ultra_token_balance') | int(0) }} Ultra tokens left.
+        Top up the balance in GigaChat Studio.
+mode: single
