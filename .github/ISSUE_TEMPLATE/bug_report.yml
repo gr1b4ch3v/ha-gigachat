@@ -1,0 +1,85 @@
+name: "Ошибка / Bug report"
+description: "Что-то работает не так / Something does not work as expected"
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Не публикуйте ключ авторизации GigaChat. В диагностике интеграции он скрыт автоматически.
+
+        Do not post your GigaChat authorization key. The integration diagnostics redact it automatically.
+  - type: textarea
+    id: description
+    attributes:
+      label: "Что случилось? / What happened?"
+      description: "Опишите проблему и что вы ожидали увидеть. / Describe the problem and what you expected to happen."
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: "Как воспроизвести / Steps to reproduce"
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: input
+    id: ha_version
+    attributes:
+      label: "Версия Home Assistant / Home Assistant version"
+      description: "Настройки → О системе / Settings → About"
+      placeholder: "2026.9.3"
+    validations:
+      required: true
+  - type: input
+    id: integration_version
+    attributes:
+      label: "Версия интеграции / Integration version"
+      placeholder: "1.0.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: scope
+    attributes:
+      label: "Версия API / API scope"
+      options:
+        - "GIGACHAT_API_PERS (физлицо / individual)"
+        - "GIGACHAT_API_B2B (юрлицо, предоплата / business, prepaid)"
+        - "GIGACHAT_API_CORP (юрлицо, по факту / business, pay-as-you-go)"
+    validations:
+      required: true
+  - type: input
+    id: model
+    attributes:
+      label: "Модель / Model"
+      placeholder: "GigaChat-3-Ultra"
+  - type: dropdown
+    id: area
+    attributes:
+      label: "Где проблема? / Affected part"
+      multiple: true
+      options:
+        - "Настройка / Configuration"
+        - "Голосовой помощник / Conversation agent"
+        - "Задачи ИИ: текст и JSON / AI tasks: text and JSON"
+        - "Задачи ИИ: картинки / AI tasks: images"
+        - "Сенсоры / Sensors"
+        - "Другое / Other"
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: "Диагностика / Diagnostics"
+      description: |
+        Страница интеграции → ⋮ → «Скачать диагностику», перетащите файл сюда.
+        Integration page → ⋮ → "Download diagnostics", drop the file here.
+  - type: textarea
+    id: logs
+    attributes:
+      label: "Логи / Logs"
+      description: |
+        Настройки → Система → Журналы, строки с `gigachat`. Для подробного журнала добавьте в `configuration.yaml`:
+        Settings → System → Logs, lines with `gigachat`. For verbose logs add to `configuration.yaml`:
+        `logger: {logs: {custom_components.gigachat: debug}}`
+      render: text

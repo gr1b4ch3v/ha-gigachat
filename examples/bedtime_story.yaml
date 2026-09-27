@@ -1,0 +1,35 @@
+# В 20:30 колонка в детской рассказывает короткую сказку, каждый вечер новую.
+# Замените media_player.kids_room_speaker на свою колонку. Слишком длинный текст колонка может обрезать,
+# поэтому сказка короткая.
+#
+# At 20:30 the kids' room speaker tells a short kind fairy tale, a new one every evening.
+# Replace media_player.kids_room_speaker with your speaker. Speakers may cut very long texts,
+# so the story is kept short.
+alias: Сказка на ночь
+description: GigaChat каждый вечер сочиняет новую короткую сказку.
+triggers:
+  - trigger: time
+    at: "20:30:00"
+conditions: []
+actions:
+  - action: ai_task.generate_data
+    data:
+      task_name: Сказка на ночь
+      entity_id: ai_task.gigachat_ai_task
+      # In English: Write a kind bedtime story of 4-5 short sentences for a 5-year-old. The hero is ...
+      # End with a wish of good night. No markup: the text will be read aloud.
+      instructions: >-
+        Сочини добрую сказку на ночь из 4-5 коротких предложений для ребёнка пяти лет.
+        Главный герой: {{ ['ёжик', 'маленький дракон', 'котёнок', 'робот', 'лисёнок',
+        'медвежонок', 'совёнок', 'черепашка'] | random }}.
+        В конце пожелай спокойной ночи. Без разметки и эмодзи: текст будет озвучен.
+    response_variable: story
+  - action: media_player.play_media
+    target:
+      entity_id: media_player.kids_room_speaker
+    data:
+      media:
+        media_content_id: "{{ story.data }}"
+        media_content_type: text
+        metadata: {}
+mode: single

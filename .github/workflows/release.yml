@@ -1,0 +1,28 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  archive:
+    name: Attach gigachat.zip
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set the version from the tag
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          jq --arg version "$version" '.version = $version' \
+            custom_components/gigachat/manifest.json > manifest.json.tmp
+          mv manifest.json.tmp custom_components/gigachat/manifest.json
+      - name: Build the archive
+        run: |
+          cd custom_components
+          zip -r ../gigachat.zip gigachat -x 'gigachat/__pycache__/*'
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: gigachat.zip

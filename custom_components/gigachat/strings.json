@@ -1,0 +1,250 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "This GigaChat project is already configured.",
+      "reauth_successful": "Re-authentication was successful.",
+      "reconfigure_successful": "Re-configuration was successful.",
+      "wrong_account": "This key belongs to a different GigaChat project."
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to GigaChat.",
+      "invalid_auth": "GigaChat rejected the authorization key. Make sure it was copied completely.",
+      "invalid_credentials_format": "This does not look like an authorization key. Paste the key from Studio or \"Client ID:Client Secret\".",
+      "invalid_scope": "The key belongs to a different account type. Choose the API version shown for your project in Studio.",
+      "ssl_error": "The GigaChat certificate could not be verified. Check the connection settings.",
+      "unknown": "Unexpected error."
+    },
+    "step": {
+      "reauth_confirm": {
+        "data": {
+          "credentials": "Authorization key"
+        },
+        "data_description": {
+          "credentials": "The new key from GigaChat Studio."
+        },
+        "description": "GigaChat rejected the saved authorization key. Create a new key in [GigaChat Studio]({studio_url}) and paste it below.",
+        "title": "Update the authorization key"
+      },
+      "reconfigure": {
+        "data": {
+          "credentials": "Authorization key",
+          "scope": "API version"
+        },
+        "data_description": {
+          "credentials": "Leave empty to keep the current key.",
+          "scope": "Must match the API version of your project in Studio."
+        },
+        "description": "Change the key, the API version or the connection settings. The key can be managed in [GigaChat Studio]({studio_url}).",
+        "sections": {
+          "advanced": {
+            "data": {
+              "auth_url": "OAuth URL",
+              "base_url": "API URL",
+              "verify_ssl": "Verify SSL certificate"
+            },
+            "data_description": {
+              "auth_url": "Default: {default_auth_url}",
+              "base_url": "Default: {default_base_url}",
+              "verify_ssl": "The Russian Trusted Root CA used by GigaChat is bundled with the integration. Disable only if verification still fails."
+            },
+            "description": "Only change these for a corporate GigaChat installation or a proxy.",
+            "name": "Connection settings"
+          }
+        },
+        "title": "Reconfigure GigaChat"
+      },
+      "user": {
+        "data": {
+          "credentials": "Authorization key",
+          "scope": "API version"
+        },
+        "data_description": {
+          "credentials": "Studio → your GigaChat API project → Settings API → Get key. \"Client ID:Client Secret\" is accepted too.",
+          "scope": "Must match the API version of your project in Studio."
+        },
+        "description": "Connect Home Assistant to GigaChat with the authorization key of your project in [GigaChat Studio]({studio_url}). Step by step instructions are in the [quick start guide]({docs_url}).",
+        "sections": {
+          "advanced": {
+            "data": {
+              "auth_url": "OAuth URL",
+              "base_url": "API URL",
+              "verify_ssl": "Verify SSL certificate"
+            },
+            "data_description": {
+              "auth_url": "Default: {default_auth_url}",
+              "base_url": "Default: {default_base_url}",
+              "verify_ssl": "The Russian Trusted Root CA used by GigaChat is bundled with the integration. Disable only if verification still fails."
+            },
+            "description": "Only change these for a corporate GigaChat installation or a proxy.",
+            "name": "Connection settings"
+          }
+        },
+        "title": "Connect GigaChat"
+      }
+    }
+  },
+  "config_subentries": {
+    "ai_task_data": {
+      "abort": {
+        "entry_not_loaded": "Cannot add or change AI tasks while the GigaChat configuration is not loaded.",
+        "reconfigure_successful": "Re-configuration was successful."
+      },
+      "entry_type": "AI task",
+      "initiate_flow": {
+        "reconfigure": "Reconfigure AI task",
+        "user": "Add AI task"
+      },
+      "step": {
+        "advanced": {
+          "data": {
+            "max_tokens": "Maximum tokens in the response",
+            "repetition_penalty": "Repetition penalty",
+            "temperature": "Temperature",
+            "top_p": "Top P"
+          },
+          "data_description": {
+            "max_tokens": "Upper limit for the length of a response.",
+            "repetition_penalty": "Values above 1 discourage repeating words, 1 is neutral.",
+            "temperature": "Higher values make answers more varied, lower values more focused.",
+            "top_p": "Alternative to temperature: only consider the most likely tokens with this total probability."
+          },
+          "description": "Leave a field empty to use the default of the model.",
+          "title": "Model parameters"
+        },
+        "init": {
+          "data": {
+            "chat_model": "Model",
+            "name": "Name",
+            "recommended": "Recommended model settings"
+          },
+          "data_description": {
+            "chat_model": "GigaChat-3-Ultra is the most capable model (free for individuals in freemium mode). GigaChat-2-Max and GigaChat-2-Pro handle complex tasks. GigaChat-2 (Lite) is the fastest and cheapest but cannot read images.",
+            "name": "Name of the AI task entity.",
+            "recommended": "Use the default sampling parameters of the model."
+          },
+          "title": "AI task"
+        }
+      }
+    },
+    "conversation": {
+      "abort": {
+        "entry_not_loaded": "Cannot add or change conversation agents while the GigaChat configuration is not loaded.",
+        "reconfigure_successful": "Re-configuration was successful."
+      },
+      "entry_type": "Conversation agent",
+      "initiate_flow": {
+        "reconfigure": "Reconfigure conversation agent",
+        "user": "Add conversation agent"
+      },
+      "step": {
+        "advanced": {
+          "data": {
+            "max_tokens": "Maximum tokens in the response",
+            "repetition_penalty": "Repetition penalty",
+            "temperature": "Temperature",
+            "top_p": "Top P"
+          },
+          "data_description": {
+            "max_tokens": "Upper limit for the length of a response.",
+            "repetition_penalty": "Values above 1 discourage repeating words, 1 is neutral.",
+            "temperature": "Higher values make answers more varied, lower values more focused.",
+            "top_p": "Alternative to temperature: only consider the most likely tokens with this total probability."
+          },
+          "description": "Leave a field empty to use the default of the model.",
+          "title": "Model parameters"
+        },
+        "init": {
+          "data": {
+            "chat_model": "Model",
+            "llm_hass_api": "Control Home Assistant",
+            "name": "Name",
+            "prompt": "Instructions",
+            "recommended": "Recommended model settings"
+          },
+          "data_description": {
+            "chat_model": "GigaChat-3-Ultra is the most capable model (free for individuals in freemium mode). GigaChat-2-Max and GigaChat-2-Pro handle complex tasks. GigaChat-2 (Lite) is the fastest and cheapest.",
+            "llm_hass_api": "Allow the model to read and control the devices exposed to Assist.",
+            "name": "Name of the conversation agent.",
+            "prompt": "Instruct how the model should respond. This can be a template.",
+            "recommended": "Use the default sampling parameters of the model."
+          },
+          "title": "Conversation agent"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "balance": {
+        "name": "{model} token balance"
+      },
+      "tokens_used": {
+        "name": "Tokens used",
+        "state_attributes": {
+          "completion_tokens": {
+            "name": "Completion tokens"
+          },
+          "precached_prompt_tokens": {
+            "name": "Cached prompt tokens"
+          },
+          "prompt_tokens": {
+            "name": "Prompt tokens"
+          },
+          "requests": {
+            "name": "Requests"
+          }
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "api_error": {
+      "message": "GigaChat returned an error: {message}"
+    },
+    "attachment_not_found": {
+      "message": "The attachment {path} was not found."
+    },
+    "auth_failed": {
+      "message": "GigaChat rejected the authorization key: {message}"
+    },
+    "connection_error": {
+      "message": "Could not connect to GigaChat: {message}"
+    },
+    "empty_response": {
+      "message": "GigaChat returned an empty response."
+    },
+    "image_not_supported": {
+      "message": "{model} cannot process images. Choose a model with image support, for example GigaChat-2-Max or GigaChat-3-Ultra."
+    },
+    "invalid_function_call": {
+      "message": "GigaChat generated an invalid function call. Please rephrase the request."
+    },
+    "invalid_structured_response": {
+      "message": "GigaChat did not return valid JSON for the requested structure."
+    },
+    "no_image_generated": {
+      "message": "GigaChat did not generate an image. Model response: {message}"
+    },
+    "payment_required": {
+      "message": "The token package of {model} is used up. Top up the balance in GigaChat Studio or choose another model."
+    },
+    "rate_limited": {
+      "message": "GigaChat is busy with another request. Please try again in a moment."
+    },
+    "request_error": {
+      "message": "GigaChat rejected the request: {message}"
+    },
+    "update_failed": {
+      "message": "Failed to update GigaChat data: {message}"
+    }
+  },
+  "selector": {
+    "scope": {
+      "options": {
+        "b2b": "Business, prepaid packages (GIGACHAT_API_B2B)",
+        "corp": "Business, pay-as-you-go (GIGACHAT_API_CORP)",
+        "pers": "Individual (GIGACHAT_API_PERS)"
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "Документация / Documentation"
+    url: https://github.com/gr1b4ch3v/ha-gigachat#readme
+    about: "Установка и настройка / Installation and configuration"
+  - name: "Уязвимость / Security vulnerability"
+    url: https://github.com/gr1b4ch3v/ha-gigachat/security/advisories/new
+    about: "Сообщите приватно, не в открытом issue / Report privately, not in a public issue"
+  - name: "Сообщество Home Assistant / Home Assistant community"
+    url: https://community.home-assistant.io/
+    about: "Общие вопросы о Home Assistant / General Home Assistant questions"

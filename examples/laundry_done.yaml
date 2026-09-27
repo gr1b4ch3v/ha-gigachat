@@ -1,0 +1,39 @@
+# Когда стиральная машина закончила, колонка напоминает развесить бельё, каждый раз другими словами.
+# Здесь стирка определяется по мощности розетки: ниже 5 Вт дольше трёх минут.
+# Замените sensor.washing_machine_power и media_player.kitchen_speaker на свои объекты.
+#
+# When the washing machine is done, a speaker reminds you to hang the laundry, in new words each time.
+# The cycle end is detected by the plug power: below 5 W for three minutes.
+# Replace sensor.washing_machine_power and media_player.kitchen_speaker with your entities.
+alias: Стирка закончилась
+description: Напоминание о готовой стирке, каждый раз новое.
+triggers:
+  - trigger: numeric_state
+    entity_id:
+      - sensor.washing_machine_power
+    below: 5
+    for:
+      minutes: 3
+conditions: []
+actions:
+  - action: ai_task.generate_data
+    data:
+      task_name: Стирка закончилась
+      entity_id: ai_task.gigachat_ai_task
+      # In English: In one short friendly sentence remind that the washing is done and the laundry should be hung.
+      instructions: >-
+        Одним коротким дружелюбным предложением напомни, что стирка закончилась
+        и бельё пора развесить. Можно с лёгким юмором. Без разметки и эмодзи.
+    response_variable: reminder
+    continue_on_error: true
+  - action: media_player.play_media
+    target:
+      entity_id: media_player.kitchen_speaker
+    data:
+      media:
+        media_content_id: >-
+          {{ reminder.data if reminder is defined and reminder.data
+          else 'Стирка закончилась, пора развесить бельё.' }}
+        media_content_type: text
+        metadata: {}
+mode: single

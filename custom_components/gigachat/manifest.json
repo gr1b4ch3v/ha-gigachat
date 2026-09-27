@@ -1,0 +1,14 @@
+{
+  "domain": "gigachat",
+  "name": "GigaChat",
+  "after_dependencies": ["assist_pipeline", "intent"],
+  "codeowners": ["@gr1b4ch3v"],
+  "config_flow": true,
+  "dependencies": ["conversation"],
+  "documentation": "https://github.com/gr1b4ch3v/ha-gigachat",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/gr1b4ch3v/ha-gigachat/issues",
+  "requirements": [],
+  "version": "1.0.0"
+}

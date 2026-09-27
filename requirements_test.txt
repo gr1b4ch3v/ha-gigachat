@@ -1,0 +1,11 @@
+# Test harness pinned to Home Assistant 2026.9.3
+pytest-homeassistant-custom-component==0.13.366
+pytest-cov==7.1.0
+ruff==0.16.9
+# Requirements of the Home Assistant components used in the tests
+hassil==3.12.1
+home-assistant-intents==2026.8.28
+mutagen==1.48.1
+ha-ffmpeg==3.2.2
+gazetteer-matcher==1.1.0
+PyTurboJPEG==1.8.3
