@@ -12,7 +12,7 @@ jobs:
     name: Attach gigachat.zip
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Set the version from the tag
         run: |
           version="${GITHUB_REF_NAME#v}"
